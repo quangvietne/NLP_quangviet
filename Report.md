@@ -9,6 +9,7 @@
 - Viết test cho SimpleTokenizer và RegexTokenizer trên bộ dữ liệu UD_English-EWT
 
 \*\*\* Kết quả chạy code :
+
 """
 --- Testing Tokenizers ---
 Input text: Hello, world! This is a test.
