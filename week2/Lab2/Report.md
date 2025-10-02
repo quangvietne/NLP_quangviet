@@ -4,6 +4,8 @@
 
 0. **Đọc và hiểu code do trợ giảng cung cấp**
 
+   - Nắm cấu trúc pipeline cơ bản: đọc dữ liệu → tokenizer → stopwords remover → vectorizer (TF, IDF) → lưu kết quả.
+
 1. **Switch Tokenizers**
 
    - Comment phần `RegexTokenizer`.
@@ -25,16 +27,28 @@
    - Thêm `Word2Vec` để sinh embedding cho mỗi văn bản.
 
 5. **Sửa code phần ghi log và reslut**
+
    - Sửa code sao cho mỗi lần chạy , file log và result đc append thêm kết quả chư ko phải ghi đè kết quả
+
+6. **Thêm phần normalization of count vectors vào trong pipeline"**
+
+   - Thêm phần normalization với chuẩn L2 sau đó tích hợp vào pipeline"
+
+7. **Tính Similarity và tìm ra top k văn bản tương đồng nhất ( cho văn bản đầu tiên)**
+   - Thêm hàm cosineSimilarity để tính độ đo cosine tương đồng giữa các vector
+   - Tính top k vector tương đồng nhất so với văn bản đầu tiên
 
 ---
 
 ## 2. Cách chạy code và log kết quả (How to run the code and log the results)
 
-1. Biên dịch và chạy chương trình bằng sbt:  
-   sbt run
+1. Biên dịch và chạy chương trình bằng sbt:
 
-2. log và result ( trong file log và result , copy past vào thì dài quá nên em ko để ở đây )
+   - clone code về và chạy như sau :
+   - sbt "runMain com.quangviet.spark.Lab17_NLPPipeline" ( với file Lab17_NLPPipeline )
+   - sbt "runMain com.quangviet.spark.Lab17_NLPPipeline_Word2Vec_lr" ( với file Lab17_NLPPipeline_Word2Vec_lr , đây là file có thêm Word2Vec và Logistic Regression như phần Exercises)
+
+2. log và result ( trong folder log và result , copy past vào thì dài quá nên em ko để ở đây )
 
 ## 3. Giải thích kết quả thu được
 
