@@ -4,7 +4,7 @@
 
 ### Bước 1: Cài Đặt và Khởi Tạo Môi Trường
 
-Đầu tiên, chúng ta cài đặt các thư viện cần thiết:
+Đầu tiên, cài đặt các thư viện cần thiết:
 
 ```bash
 pip install -r requirements.txt
@@ -13,13 +13,13 @@ pip install -r requirements.txt
 Các thư viện chính sử dụng trong lab:
 
 - **gensim**: Cung cấp API để tải mô hình pre-trained và huấn luyện Word2Vec
-- **numpy**: Xử lý các phép toán vector và ma trận
-- **scipy**: Tính toán độ tương đồng cosine
-- **matplotlib**: Trực quan hóa kết quả (nếu cần)
+- **numpy**
+- **scipy**
+- **matplotlib**
 
 ### Bước 2: Xây Dựng Lớp WordEmbedder
 
-Chúng ta tạo lớp `WordEmbedder` để quản lý các tác vụ liên quan đến embedding:
+Tạo lớp `WordEmbedder` để quản lý các tác vụ liên quan đến embedding:
 
 ```python
 class WordEmbedder:
@@ -57,13 +57,19 @@ Phương pháp này đơn giản nhưng hiệu quả, cho phép biểu diễn m�
 
 ### Bước 5: Huấn Luyện Mô Hình Word2Vec Tùy Chỉnh (Bonus)
 
-Ngoài việc sử dụng pre-trained models, chúng ta cũng thử huấn luyện Word2Vec từ đầu trên tập dữ liệu UD_English-EWT. Điều này giúp chúng ta hiểu rõ hơn quá trình học embeddings.
+Huấn luyện Word2Vec từ đầu trên tập dữ liệu UD_English-EWT. Điều này giúp hiểu rõ hơn quá trình học embeddings.
 
 ### Bước 6: Mở Rộng với Spark (Advanced)
 
 Sử dụng PySpark để huấn luyện Word2Vec trên dataset lớn hơn (C4 dataset). Spark cho phép xử lý dữ liệu massive bằng cách phân tán tính toán trên nhiều máy.
 
 ---
+
+### Bước 7 : Trực quan hóa Embedding
+
+- Sử dụng PCA để giảm chiều các word vector xuống 3D.
+- Vẽ biểu đồ scatter plot để trực quan hóa và quan sát các cụm từ.
+  -( kết quả được lưu ở file NguyenQuangViet_22001659.pdf đã làm ở tuần trước)
 
 ## Hướng Dẫn Chạy Code
 
@@ -235,41 +241,6 @@ Các từ tương tự với 'computer':
 - Có khả năng mở rộng trên dữ liệu massive (terabytes)
 - Phù hợp cho các tập đoàn với infrastructure lớn
 - Có thể tích hợp với các pipeline big data khác
-
----
-
-## Kết Luận
-
-### Thành Tựu Chính
-
-1. **Hiểu rõ Word Embeddings**: Chúng ta đã chuyển từ TF-IDF (thưa) sang Word2Vec (dày đặc) và thấy được lợi ích của ngữ cảnh ngữ nghĩa.
-
-2. **Sử dụng Pre-trained Models**: GloVe cung cấp embedding chất lượng cao ngay lập tức mà không cần huấn luyện lâu.
-
-3. **Tính Toán Độ Tương Đồng**: Cosine similarity là công cụ hiệu quả trong không gian embedding.
-
-4. **Embedding Tài Liệu**: Phương pháp averaging là một cách đơn giản nhưng hiệu quả để tạo document vectors.
-
-5. **Mở Rộng với Spark**: Chúng ta đã thấy cách mở rộng Word2Vec trên dữ liệu lớn bằng distributed computing.
-
-### Bài Học Rút Ra
-
-- Pre-trained embeddings phù hợp cho hầu hết các tác vụ NLP thực tế
-- Tự huấn luyện cần dữ liệu lớn (thường > 1M từ) để có chất lượng tốt
-- Embedding vectors giữ được mối quan hệ ngữ cảnh phong phú, cho phép tính toán analogies
-- Spark cung cấp khả năng mở rộng nhưng đi kèm với độ phức tạp cao hơn
-
-### Hướng Phát Triển Tiếp Theo
-
-1. **Áp dụng cho Tiếng Việt**: Sử dụng FastText hoặc PhoBERT cho kết quả tốt hơn
-2. **Trực Quan Hóa 2D**: Dùng t-SNE hoặc UMAP để visualize clusters từ
-3. **Fine-tuning**: Tùy chỉnh embeddings cho các domain chuyên biệt
-4. **Contextual Embeddings**: Chuyển sang BERT/Transformer cho kết quả tốt hơn
-5. **Multi-lingual Models**: Sử dụng mBERT hoặc XLM-R cho đa ngôn ngữ
-
----
-
-## Tài Liệu Tham Khảo
 
 ### Dữ Liệu Sử Dụng
 
