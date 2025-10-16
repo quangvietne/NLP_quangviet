@@ -69,7 +69,7 @@ Sử dụng PySpark để huấn luyện Word2Vec trên dataset lớn hơn (C4 d
 
 - Sử dụng PCA để giảm chiều các word vector xuống 3D.
 - Vẽ biểu đồ scatter plot để trực quan hóa và quan sát các cụm từ.
-  -( kết quả được lưu ở file NguyenQuangViet_22001659.pdf đã làm ở tuần trước)
+- ( kết quả được lưu ở file NguyenQuangViet_22001659.pdf đã làm ở tuần trước)
 
 ## Hướng Dẫn Chạy Code
 
