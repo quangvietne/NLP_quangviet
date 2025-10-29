@@ -61,9 +61,9 @@ Text: Could not finish watching, so bad.
 - Đánh giá bằng `MulticlassClassificationEvaluator` với độ chính xác và F1-score.
 
 ## Result Analysis
-| Model | Accuracy | F1-score |
+| Model | Accuracy | 
 |--------|-----------|-----------|
-| Logistic Regression (PySpark) | ~0.85 | ~0.84 |
+| Logistic Regression (PySpark) | ~0.72|
 
 
 **Phân tích:**  
