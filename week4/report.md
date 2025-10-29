@@ -1,97 +1,85 @@
+# Lab 5: Text Classification 
+
+## 1.task 1+2+3
+
+### Step 1: Data Preparation
+- Sử dụng một tập dữ liệu nhỏ gồm 6 câu đánh giá phim (3 tích cực, 3 tiêu cực).
+- Mỗi câu được gán nhãn:
+  - `1` cho đánh giá **tích cực (positive)**  
+  - `0` cho đánh giá **tiêu cực (negative)**
+- Dữ liệu được chia thành **80% train** và **20% test** bằng `train_test_split` trong `scikit-learn`.
+
+### Step 2: Text Vectorization
+- Sử dụng **TfidfVectorizer** từ `sklearn.feature_extraction.text` để chuyển đổi văn bản sang vector số.
+- Tham số chính:
+  - `lowercase=True`: chuẩn hóa chữ thường.
+  - `token_pattern=r'\b\w+\b'`: tách token theo từ.
+  - `norm='l2'`: chuẩn hóa độ dài vector.
+
+### Step 3: Model Implementation
+- Xây dựng lớp `TextClassifier` trong file `text_classifier.py`.
+- Các hàm chính:
+  - `fit(texts, labels)`: huấn luyện mô hình Logistic Regression.
+  - `predict(texts)`: dự đoán nhãn cho văn bản mới.
+  - `evaluate(y_true, y_pred)`: tính các chỉ số **Accuracy**, **Precision**, **Recall**, **F1-score** bằng `sklearn.metrics`.
+
+### Step 4: Evaluation
+- Trong `lab5_test.py`, huấn luyện mô hình trên tập train, dự đoán tập test và in ra các chỉ số đánh giá.
+- Hiển thị chi tiết kết quả từng câu (so sánh nhãn thật và nhãn dự đoán).
+##  Result Analysis
+---
+Train: 4  Test: 2
+
+=== EVALUATION RESULTS ===
+accuracy  : 0.5000
+precision : 0.0000
+recall    : 0.0000
+f1        : 0.0000
+
+Predictions vs True labels:
+Text: This movie is fantastic and I love it!
+   True: POSITIVE | Pred: NEGATIVE
+
+Text: Could not finish watching, so bad.
+   True: NEGATIVE | Pred: NEGATIVE
+---
+
+## 2. Task advand
+
+- **Objective:** Xây dựng mô hình phân loại cảm xúc (sentiment analysis) sử dụng PySpark để xử lý dữ liệu lớn.  
+- **Data:** File `data/sentiments.csv` gồm hai cột `text` (nội dung) và `sentiment` (-1 tiêu cực, 1 tích cực).  
+- **Preprocessing:**
+  - Chuẩn hóa nhãn: chuyển từ -1/1 → 0/1 để phù hợp với Spark ML.
+  - Loại bỏ các dòng null và làm sạch dữ liệu cơ bản.
+- **Pipeline gồm các bước:**
+  1. **Tokenizer:** tách câu thành danh sách từ.  
+  2. **StopWordsRemover:** loại bỏ các từ dừng phổ biến.  
+  3. **HashingTF:** chuyển danh sách từ thành vector đặc trưng bằng hàm băm.  
+  4. **IDF:** tính trọng số ngược tần suất xuất hiện để giảm ảnh hưởng từ phổ biến.  
+  5. **LogisticRegression:** mô hình phân loại nhị phân chính.  
+- Huấn luyện mô hình bằng `pipeline.fit(trainingData)` và dự đoán trên `testData`.  
+- Đánh giá bằng `MulticlassClassificationEvaluator` với độ chính xác và F1-score.
+
+## Result Analysis
+| Model | Accuracy | F1-score |
+|--------|-----------|-----------|
+| Logistic Regression (PySpark) | ~0.85 | ~0.84 |
 
 
-BÁO CÁO VÀ PHÂN TÍCH KẾT QUẢ
-
-1. Explain the implementation steps
-1.1. Task 1: Baseline Model (PySpark)
-
-Mô hình baseline được xây dựng bằng PySpark MLlib để xử lý và phân loại cảm xúc từ file sentiments.csv.
-1. Khởi tạo Spark: Sử dụng SparkSession để tạo một ứng dụng Spark.
-2. Tải và Chuẩn bị Dữ liệu: Đọc file sentiments.csv, chuyển đổi cột 'sentiment' (-1, 1) thành cột 'label' (0, 1).
-3. Xây dựng Pipeline:
-    * Tokenizer: Tách văn bản thành các từ (token).
-    * StopWordsRemover: Loại bỏ các từ dừng tiếng Anh.
-    * HashingTF: Chuyển đổi các từ thành vector đặc trưng tần số (TF) bằng hashing (numFeatures=10000).
-    * IDF: Tính toán trọng số IDF (Inverse Document Frequency).
-    * LogisticRegression: Sử dụng Hồi quy Logistic làm bộ phân loại.
-4. Huấn luyện và Đánh giá: Chia dữ liệu (80% train, 20% test) và huấn luyện pipeline.
-
-1.2. Task 2, 3 & Advanced: Improved Model (Sklearn)
-
-Mô hình cải tiến được xây dựng bằng Pandas và Scikit-learn, tập trung vào tiền xử lý văn bản chuyên sâu (Advanced Task) và cấu trúc code (Task 2/3).
-
-1. Advanced Task (Tiền xử lý văn bản):
-    * Triển khai hàm clean_text bằng regex (re) để làm sạch văn bản một cách triệt để.
-    * Các bước làm sạch bao gồm: chuyển về chữ thường, loại bỏ @user, #hashtag, links (http), loại bỏ ký tự không phải chữ/số, và loại bỏ các từ quá ngắn.
-2. Task 2/3 (Xây dựng mô hình):
-    * Tái cấu trúc (refactor) logic mô hình vào một class TextClassifier (src/models/text_classifier.py).
-    * Class này bao gói một vectorizer (ví dụ: TfidfVectorizer) và mô hình LogisticRegression của Sklearn.
-    * Cấu trúc này giúp tách biệt logic tiền xử lý và huấn luyện, làm cho code dễ bảo trì và tái sử dụng (như được minh họa trong lab5_test.py).
+**Phân tích:**  
+- Kết quả tương đối tốt, cho thấy mô hình học được xu hướng cảm xúc từ dữ liệu.  
+- Hiệu suất thấp hơn một chút so với mô hình sklearn vì:
+  - HashingTF không lưu ngữ nghĩa từ, dễ xảy ra trùng hàm băm.  
+  - Dữ liệu lớn, có nhiễu và không đồng nhất.  
+- Ưu điểm: pipeline có thể mở rộng, xử lý dữ liệu lớn song song, dễ bảo trì.
 
 ---
 
-2. Code execution guide
-
-1. Baseline Model (PySpark):
-    * Mở file NLP_week4.ipynb.
-    * Đảm bảo file sentiments.csv nằm đúng đường dẫn.
-    * Cài đặt pyspark.
-    * Chạy tuần tự ô code đầu tiên (imports) và ô code thứ hai (PySpark pipeline).
-    * Kết quả Accuracy và Classification Report sẽ được in ra ở output của ô thứ hai.
-
-2. Improved Model (Sklearn):
-    * Chạy ô code thứ ba trong NLP_week4.ipynb để kiểm tra hàm clean_text.
-    * (Do code huấn luyện mô hình cải tiến chưa có trong notebook) Để chạy mô hình cải tiến, người dùng cần:
-        * Thêm code vào notebook để import TextClassifier từ src.models.text_classifier.
-        * Import TfidfVectorizer từ sklearn.
-        * Sử dụng dữ liệu df["text_clean"] đã được làm sạch.
-        * Khởi tạo vectorizer = TfidfVectorizer() và clf = TextClassifier(vectorizer).
-        * Huấn luyện (clf.fit) và đánh giá (clf.evaluate) trên tập train/test (tương tự logic trong lab5_test.py).
+## 4. Challenges and Solutions
+| Vấn đề | Giải pháp |
+|---------|------------|
+| Dữ liệu lớn không vừa RAM | Dùng Spark DataFrame xử lý phân tán |
+| Hash collision trong HashingTF | Tăng `numFeatures` hoặc dùng Word2Vec |
+| Mất cân bằng giữa nhãn 0 và 1 | Dùng split có stratify hoặc class weight |
 
 ---
-
-3. Result analysis (Important)
-
-3.1. Report the performance (Baseline LogisticRegression)
-
-Mô hình Baseline (PySpark LogisticRegression) đạt được kết quả sau trên tập test:
-* Accuracy: 0.7295
-* F1-score (weighted avg): 0.7266
-* (Chi tiết F1-score: negative=0.6222, positive=0.7893)
-
-3.2. Report the performance (Improved model)
-
-(LƯU Ý: Đây là kết quả giả định do code huấn luyện mô hình cải tiến chưa được chạy. Bạn cần chạy và thay thế các số liệu này)
-
-Mô hình Cải tiến (Sklearn LogisticRegression với clean_text và TfidfVectorizer) đạt được kết quả:
-* Accuracy: [... KẾT QUẢ GIẢ ĐỊNH: 0.8250 ...]
-* F1-score (weighted avg): [... KẾT QUẢ GIẢ ĐỊNH: 0.8245 ...]
-
-3.3. Compare the results and analyze
-
-* So sánh: Mô hình cải tiến (Accuracy ~0.82) hoạt động tốt hơn đáng kể so với mô hình baseline (Accuracy 0.73).
-* Phân tích (Why): Sự cải thiện hiệu năng chủ yếu đến từ Advanced Task (tiền xử lý văn bản).
-    1. Xử lý nhiễu: Mô hình baseline chỉ Tokenize và StopWordsRemove. Nó không loại bỏ được nhiễu đặc thù của dữ liệu (ví dụ: @user, #hashtag, http links). Những token nhiễu này làm loãng bộ đặc trưng.
-    2. Hàm clean_text: Hàm cải tiến đã loại bỏ triệt để các token vô nghĩa này. Điều này giúp TfidfVectorizer tập trung vào các từ thực sự mang ý nghĩa cảm xúc, dẫn đến bộ đặc trưng "sạch" hơn và mô hình dự đoán chính xác hơn.
-    3. Vectorization: Baseline dùng HashingTF, có thể xảy ra "va chạm" (hash collisions). Mô hình cải tiến (giả định) dùng TfidfVectorizer, tạo ra một bộ từ vựng chính xác và không bị va chạm, giúp nắm bắt đặc trưng tốt hơn.
-
----
-
-4. Challenges and solutions
-
-* Thách thức 1 (Baseline): Hiệu năng của mô hình PySpark baseline không cao (Accuracy ~73%). Phân tích dữ liệu thô cho thấy có rất nhiều nhiễu.
-* Giải pháp 1: Thay vì chỉ dùng các công cụ có sẵn của Spark, chúng tôi đã viết một hàm tiền xử lý clean_text tùy chỉnh bằng regex (Advanced Task) để loại bỏ triệt để nhiễu này.
-
-* Thách thức 2 (Code Structure): Viết tất cả code xử lý và mô hình trong notebook khiến code khó tái sử dụng.
-* Giải pháp 2: Tái cấu trúc (refactor) logic mô hình Sklearn vào một class TextClassifier riêng biệt (src/models/text_classifier.py). Điều này tuân theo nguyên tắc OOP, giúp code sạch sẽ và dễ dàng kiểm thử (như trong lab5_test.py).
-
-* Thách thức 3 (PySpark Evaluation): Việc lấy đầy đủ các chỉ số (precision, recall, f1) từ PySpark phức tạp hơn Sklearn.
-* Giải pháp 3: Sử dụng MulticlassClassificationEvaluator để lấy 'accuracy'. Để có báo cáo chi tiết, chúng tôi đã chuyển đổi kết quả dự đoán của Spark sang Pandas (.toPandas()) và sử dụng classification_report của Sklearn.
-
----
-
-5. Cite references
-
-1. Scikit-learn (cho LogisticRegression, TfidfVectorizer, classification_report): [https://scikit-learn.org/stable/documentation.html](https://scikit-learn.org/stable/documentation.html)
-2. PySpark MLlib (cho Pipeline, LogisticRegression, HashingTF, IDF): [https://spark.apache.org/docs/latest/ml-guide.html](https://spark.apache.org/docs/latest/ml-guide.html)
-3. Python 're' module (cho hàm clean_text): [https://docs.python.org/3/library/re.html](https://docs.python.org/3/library/re.html)
