@@ -1,85 +1,57 @@
 # Lab 5: Text Classification 
 
-## 1.task 1+2+3
-
-### Step 1: Data Preparation
-- Sử dụng một tập dữ liệu nhỏ gồm 6 câu đánh giá phim (3 tích cực, 3 tiêu cực).
-- Mỗi câu được gán nhãn:
-  - `1` cho đánh giá **tích cực (positive)**  
-  - `0` cho đánh giá **tiêu cực (negative)**
-- Dữ liệu được chia thành **80% train** và **20% test** bằng `train_test_split` trong `scikit-learn`.
-
-### Step 2: Text Vectorization
-- Sử dụng **TfidfVectorizer** từ `sklearn.feature_extraction.text` để chuyển đổi văn bản sang vector số.
-- Tham số chính:
-  - `lowercase=True`: chuẩn hóa chữ thường.
-  - `token_pattern=r'\b\w+\b'`: tách token theo từ.
-  - `norm='l2'`: chuẩn hóa độ dài vector.
-
-### Step 3: Model Implementation
-- Xây dựng lớp `TextClassifier` trong file `text_classifier.py`.
-- Các hàm chính:
-  - `fit(texts, labels)`: huấn luyện mô hình Logistic Regression.
-  - `predict(texts)`: dự đoán nhãn cho văn bản mới.
-  - `evaluate(y_true, y_pred)`: tính các chỉ số **Accuracy**, **Precision**, **Recall**, **F1-score** bằng `sklearn.metrics`.
-
-### Step 4: Evaluation
-- Trong `lab5_test.py`, huấn luyện mô hình trên tập train, dự đoán tập test và in ra các chỉ số đánh giá.
-- Hiển thị chi tiết kết quả từng câu (so sánh nhãn thật và nhãn dự đoán).
-##  Result Analysis
----
-Train: 4  Test: 2
-
-=== EVALUATION RESULTS ===
-accuracy  : 0.5000
-precision : 0.0000
-recall    : 0.0000
-f1        : 0.0000
-
-Predictions vs True labels:
-Text: This movie is fantastic and I love it!
-   True: POSITIVE | Pred: NEGATIVE
-
-Text: Could not finish watching, so bad.
-   True: NEGATIVE | Pred: NEGATIVE
----
-
-## 2. Task advand
-
-- **Objective:** Xây dựng mô hình phân loại cảm xúc (sentiment analysis) sử dụng PySpark để xử lý dữ liệu lớn.  
-- **Data:** File `data/sentiments.csv` gồm hai cột `text` (nội dung) và `sentiment` (-1 tiêu cực, 1 tích cực).  
-- **Preprocessing:**
-  - Chuẩn hóa nhãn: chuyển từ -1/1 → 0/1 để phù hợp với Spark ML.
-  - Loại bỏ các dòng null và làm sạch dữ liệu cơ bản.
-- **Pipeline gồm các bước:**
-  1. **Tokenizer:** tách câu thành danh sách từ.  
-  2. **StopWordsRemover:** loại bỏ các từ dừng phổ biến.  
-  3. **HashingTF:** chuyển danh sách từ thành vector đặc trưng bằng hàm băm.  
-  4. **IDF:** tính trọng số ngược tần suất xuất hiện để giảm ảnh hưởng từ phổ biến.  
-  5. **LogisticRegression:** mô hình phân loại nhị phân chính.  
-- Huấn luyện mô hình bằng `pipeline.fit(trainingData)` và dự đoán trên `testData`.  
-- Đánh giá bằng `MulticlassClassificationEvaluator` với độ chính xác và F1-score.
-
-## Result Analysis
-| Model | Accuracy | 
-|--------|-----------|-----------|
-| Logistic Regression (PySpark) | ~0.72|
+# 1. Giải thích các bước thực hiện
 
 
-**Phân tích:**  
-- Kết quả tương đối tốt, cho thấy mô hình học được xu hướng cảm xúc từ dữ liệu.  
-- Hiệu suất thấp hơn một chút so với mô hình sklearn vì:
-  - HashingTF không lưu ngữ nghĩa từ, dễ xảy ra trùng hàm băm.  
-  - Dữ liệu lớn, có nhiễu và không đồng nhất.  
-- Ưu điểm: pipeline có thể mở rộng, xử lý dữ liệu lớn song song, dễ bảo trì.
+### Bước 1: Xây dựng TextClassifier với Scikit-learn (Task 1 & 2)
+Phần đầu tiên tập trung vào việc xây dựng một pipeline phân loại văn bản cơ bản bằng scikit-learn trên một tập dữ liệu nhỏ.
 
----
+### 1 . Tạo TextClassifier: Lớp TextClassifier đã được triển khai trong tệp src/models/text_classifier.py.
+- Lớp này được khởi tạo với một vectorizer (ví dụ: TfidfVectorizer).
+- Phương thức fit nhận vào texts và labels, sử dụng vectorizer.fit_transform để chuyển đổi văn bản và sau đó huấn luyện một mô hình LogisticRegression.
+- Phương thức predict sử dụng vectorizer.transform trên văn bản mới và trả về dự đoán từ mô hình đã huấn luyện.
+- Phương thức evaluate tính toán và trả về một dictionary các chỉ số (accuracy, precision, recall, f1) bằng cách sử dụng các hàm từ sklearn.metrics.
 
-## 4. Challenges and Solutions
-| Vấn đề | Giải pháp |
-|---------|------------|
-| Dữ liệu lớn không vừa RAM | Dùng Spark DataFrame xử lý phân tán |
-| Hash collision trong HashingTF | Tăng `numFeatures` hoặc dùng Word2Vec |
-| Mất cân bằng giữa nhãn 0 và 1 | Dùng split có stratify hoặc class weight |
+### 2 . Tạo tệp Test Case: Tệp lab5_test.ipynb được tạo để kiểm tra TextClassifier.
+- Tập dữ liệu texts và labels nhỏ từ tài liệu hướng dẫn đã được định nghĩa.
+- Dữ liệu được chia thành tập huấn luyện (4 mẫu) và tập kiểm tra (2 mẫu) bằng train_test_split.
+- Một TfidfVectorizer của scikit-learn và TextClassifier đã được khởi tạo.
+- Mô hình được huấn luyện trên tập X_train, dự đoán trên X_test, và các chỉ số đánh giá được in ra.
 
----
+### Bước 2: Chạy Pipeline PySpark cơ bản (Task 3)
+- Phần thứ hai liên quan đến việc chạy và phân tích một pipeline học máy quy mô lớn hơn bằng Apache Spark, như được mô tả
+trong tệp lab5_spark_sentiment_analysis.ipynb.
+
+1 . Khởi tạo và Tải dữ liệu: Khởi tạo một SparkSession. Dữ liệu được tải từ tệp CSV, và cột label được chuẩn hóa thành 0 (negative) và 1 (positive). Các hàng có giá trị null đã bị loại bỏ.
+
+2 . Xây dựng Pipeline: Một Pipeline của Spark ML đã được xây dựng , bao gồm các giai đoạn sau:
+- Tokenizer: Tách văn bản thành các từ (tokens).
+- StopWordsRemover: Loại bỏ các từ dừng phổ biến.
+- HashingTF: Chuyển đổi token thành các vectơ đặc trưng thô bằng kỹ thuật băm.
+- IDF: Tính toán lại trọng số của các vectơ đặc trưng HashingTF.
+- LogisticRegression: Mô hình phân loại tuyến tính.
+
+3 . Huấn luyện và Đánh giá: Pipeline được huấn luyện trên dữ liệu training bằng pipeline.fit(). Mô hình sau đó được đánh giá trên dữ liệu test bằng MulticlassClassificationEvaluator để tính toán các chỉ số Accuracy, F1, Precision và Recall.
+
+### Bước 3: Thử nghiệm Cải thiện Mô hình (Task 4)
+- Phần cuối cùng tập trung vào việc thử nghiệm các kỹ thuật khác nhau để cải thiện hiệu suất của mô hình PySpark cơ bản, theo yêu cầu của criteria.pdf. Các thử nghiệm này được thực hiện trong tệp lab5_improvement_test.ipynb.
+- Ba thử nghiệm đã được tiến hành:
+
+Thử nghiệm 1: Thay thế TF-IDF bằng Word2Vec:
+
+- Trong pipeline, các giai đoạn HashingTF và IDF đã được thay thế bằng một giai đoạn Word2Vec.
+
+- Word2Vec học các nhúng từ (với vectorSize=100) và tạo ra một vectơ đặc trưng duy nhất cho mỗi tài liệu.
+
+- Mô hình LogisticRegression vẫn được giữ nguyên.
+
+Thử nghiệm 2: Thay thế LogisticRegression bằng Naive Bayes:
+
+- Pipeline quay trở lại sử dụng HashingTF và IDF để tạo đặc trưng.
+
+- Mô hình LogisticRegression ở giai đoạn cuối đã được thay thế bằng mô hình NaiveBayes, một mô hình xác suất thường hoạt động tốt cho văn bản.
+
+Thử nghiệm 3: Thay thế LogisticRegression bằng Neural Network (MLP):
+- Pipeline vẫn sử dụng HashingTF (với numFeatures=10000) và IDF.
+- Mô hình LogisticRegression được thay thế bằng MultilayerPerceptronClassifier (MLP).
+- Kiến trúc mạng được định nghĩa bằng layers = [10000, 64, 32, 2], trong đó 10000 là kích thước đầu vào (khớp với numFeatures), 64 và 32 là các lớp ẩn, và 2 là lớp đầu ra (cho 2 nhãn 0 và 1).
