@@ -109,12 +109,12 @@ Accuracy: 0.7295
 F1 Score: 0.7266
 
 ### 3.2. Hiệu suất các Mô hình Cải tiến
-Ba thử nghiệm cải tiến đã được thực hiện trong lab5_improvement_test.ipynb. Kết quả được tóm tắt trong bảng dưới đây
-Thử nghiệm (Pipeline),Accuracy,F1 Score,So với Baseline
-Baseline (TF-IDF + LogisticRegression),0.7295,0.7266,-
-1. Word2Vec + LogisticRegression,0.6411,0.5710, Kém hơn
-2. TF-IDF + NaiveBayes,0.6844,0.6842, Kém hơn
-3. TF-IDF + Neural Network (MLP),0.7755,0.7736, Tốt hơn
+- Ba thử nghiệm cải tiến đã được thực hiện trong lab5_improvement_test.ipynb. Kết quả được tóm tắt trong bảng dưới đây
+- Thử nghiệm (Pipeline),Accuracy,F1 Score
+0. Baseline (TF-IDF + LogisticRegression), Accuracy : 0.7295, F1 Score: 0.7266,-
+1. Word2Vec + LogisticRegression,Accuracy : 0.6411, F1 Score: 0.5710
+2. TF-IDF + NaiveBayes, Accuracy : 0.6844, F1 Score: 0.6842
+3. TF-IDF + Neural Network (MLP),Accuracy : 0.6844 0.7755, F1 Score: 0.7736
 
 - Baseline (TF-IDF + LogisticRegression): Mô hình tuyến tính cơ sở hoạt động khá tốt, đạt Accuracy 0.7295.
 - Thất bại (Word2Vec, NaiveBayes):
