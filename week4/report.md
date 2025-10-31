@@ -3,8 +3,7 @@
 # 1. Giải thích các bước thực hiện
 
 
-### Bước 1: Xây dựng TextClassifier với Scikit-learn (Task 1 & 2)
-Phần đầu tiên tập trung vào việc xây dựng một pipeline phân loại văn bản cơ bản bằng scikit-learn trên một tập dữ liệu nhỏ.
+### Bước 1: Xây dựng TextClassifier với Scikit-learn (Task 1 , 2 , 3)
 
 ### 1 . Tạo TextClassifier: Lớp TextClassifier đã được triển khai trong tệp src/models/text_classifier.py.
 - Lớp này được khởi tạo với một vectorizer (ví dụ: TfidfVectorizer).
@@ -18,9 +17,8 @@ Phần đầu tiên tập trung vào việc xây dựng một pipeline phân lo�
 - Một TfidfVectorizer của scikit-learn và TextClassifier đã được khởi tạo.
 - Mô hình được huấn luyện trên tập X_train, dự đoán trên X_test, và các chỉ số đánh giá được in ra.
 
-### Bước 2: Chạy Pipeline PySpark cơ bản (Task 3)
-- Phần thứ hai liên quan đến việc chạy và phân tích một pipeline học máy quy mô lớn hơn bằng Apache Spark, như được mô tả
-trong tệp lab5_spark_sentiment_analysis.ipynb.
+### Bước 2: Chạy Pipeline PySpark cơ bản (advand Task)
+- Chạy và phân tích một pipeline học máy quy mô lớn hơn bằng Apache Spark (lab5_spark_sentiment_analysis.ipynb)
 
 1 . Khởi tạo và Tải dữ liệu: Khởi tạo một SparkSession. Dữ liệu được tải từ tệp CSV, và cột label được chuẩn hóa thành 0 (negative) và 1 (positive). Các hàng có giá trị null đã bị loại bỏ.
 
@@ -34,7 +32,7 @@ trong tệp lab5_spark_sentiment_analysis.ipynb.
 3 . Huấn luyện và Đánh giá: Pipeline được huấn luyện trên dữ liệu training bằng pipeline.fit(). Mô hình sau đó được đánh giá trên dữ liệu test bằng MulticlassClassificationEvaluator để tính toán các chỉ số Accuracy, F1, Precision và Recall.
 
 ### Bước 3: Thử nghiệm Cải thiện Mô hình (Task 4)
-- Phần cuối cùng tập trung vào việc thử nghiệm các kỹ thuật khác nhau để cải thiện hiệu suất của mô hình PySpark cơ bản, theo yêu cầu của criteria.pdf. Các thử nghiệm này được thực hiện trong tệp lab5_improvement_test.ipynb.
+- Các thử nghiệm này được thực hiện trong tệp lab5_improvement_test.ipynb.
 - Ba thử nghiệm đã được tiến hành:
 
 Thử nghiệm 1: Thay thế TF-IDF bằng Word2Vec:
