@@ -36,20 +36,99 @@
 - Ba thử nghiệm đã được tiến hành:
 
 Thử nghiệm 1: Thay thế TF-IDF bằng Word2Vec:
-
 - Trong pipeline, các giai đoạn HashingTF và IDF đã được thay thế bằng một giai đoạn Word2Vec.
-
 - Word2Vec học các nhúng từ (với vectorSize=100) và tạo ra một vectơ đặc trưng duy nhất cho mỗi tài liệu.
-
 - Mô hình LogisticRegression vẫn được giữ nguyên.
 
 Thử nghiệm 2: Thay thế LogisticRegression bằng Naive Bayes:
-
 - Pipeline quay trở lại sử dụng HashingTF và IDF để tạo đặc trưng.
-
 - Mô hình LogisticRegression ở giai đoạn cuối đã được thay thế bằng mô hình NaiveBayes, một mô hình xác suất thường hoạt động tốt cho văn bản.
 
 Thử nghiệm 3: Thay thế LogisticRegression bằng Neural Network (MLP):
 - Pipeline vẫn sử dụng HashingTF (với numFeatures=10000) và IDF.
 - Mô hình LogisticRegression được thay thế bằng MultilayerPerceptronClassifier (MLP).
 - Kiến trúc mạng được định nghĩa bằng layers = [10000, 64, 32, 2], trong đó 10000 là kích thước đầu vào (khớp với numFeatures), 64 và 32 là các lớp ẩn, và 2 là lớp đầu ra (cho 2 nhãn 0 và 1).
+
+# 2. Hướng dẫn chạy code 
+### Với task 1, 2 , 3 . 
+- Chạy file lab5_test.ipynb và xem kết quả : 
+- Result
+
+ Train: 4  Test: 2
+
+=== EVALUATION RESULTS ===
+accuracy  : 0.0000
+precision : 0.0000
+recall    : 0.0000
+f1        : 0.0000
+
+Predictions vs True labels:
+Text: This movie is fantastic and I love it!
+   True: POSITIVE | Pred: NEGATIVE
+
+Text: Could not finish watching, so bad.
+   True: NEGATIVE | Pred: POSITIVE
+- Giải thích : Do data nhỏ , nên mô hình học chưa tốt từ dữ liệu có sẵn -> Dự đoan sai tất 
+### Với task advand : 
+- Chạy file lab5_spark_sentiment_analysis.ipynb  để xem kq
+- Result : 
+Loaded 5792 rows initially, dropped 1 null rows, final count: 5791
+Accuracy: 0.7295
+F1 Score: 0.7266
+Weighted Precision: 0.7255
+Weighted Recall: 0.7295
+### Với task 4 (improvement)
+- Chạy file lab5_improvement_test.ipynb để xem kq
+- Result : 
+- Thay TF-IDF thành word2vec : 
+Loaded 5792 rows initially, dropped 1 null rows, final count: 5791
+Accuracy: 0.6411
+F1 Score: 0.5710
+Weighted Precision: 0.6222
+Weighted Recall: 0.6411
+- Thay LogisticRegression bằng NaiveBayes :
+Loaded 5792 rows initially, dropped 1 null rows, final count: 5791
+Accuracy: 0.6844
+F1 Score: 0.6842
+Weighted Precision: 0.6841
+Weighted Recall: 0.6844
+- Thay LogisticRegression bằng neural network : 
+Loaded 5792 rows initially, dropped 1 null rows, final count: 5791
+Starting model training (MLP)... This may take a while.
+Model training complete.
+Accuracy: 0.7755
+F1 Score: 0.7736
+Weighted Precision: 0.7730
+Weighted Recall: 0.7755
+# 3. Phân tích kết quả 
+Phần này báo cáo các chỉ số hiệu suất của mô hình PySpark cơ sở và các mô hình cải tiến, đồng thời phân tích lý do cho sự khác biệt.
+
+### 3.1. Hiệu suất Mô hình Cơ sở (Baseline)
+Mô hình cơ sở sử dụng pipeline TF-IDF + LogisticRegression như được định nghĩa trong lab5_spark_sentiment_analysis.ipynb.
+Accuracy: 0.7295
+F1 Score: 0.7266
+
+### 3.2. Hiệu suất các Mô hình Cải tiến
+Ba thử nghiệm cải tiến đã được thực hiện trong lab5_improvement_test.ipynb. Kết quả được tóm tắt trong bảng dưới đây
+Thử nghiệm (Pipeline),Accuracy,F1 Score,So với Baseline
+Baseline (TF-IDF + LogisticRegression),0.7295,0.7266,-
+1. Word2Vec + LogisticRegression,0.6411,0.5710, Kém hơn
+2. TF-IDF + NaiveBayes,0.6844,0.6842, Kém hơn
+3. TF-IDF + Neural Network (MLP),0.7755,0.7736, Tốt hơn
+
+- Baseline (TF-IDF + LogisticRegression): Mô hình tuyến tính cơ sở hoạt động khá tốt, đạt Accuracy 0.7295.
+- Thất bại (Word2Vec, NaiveBayes):
++ Word2Vec + LR thất bại vì việc tính trung bình các vector từ để biểu diễn câu là một kỹ thuật quá đơn giản, làm mất đi các sắc thái quan trọng của văn bản.
++ TF-IDF + NaiveBayes hoạt động kém hơn vì LogisticRegression có khả năng gán trọng số quan trọng cho các đặc trưng (từ) có tính dự đoán cao, trong khi NaiveBayes thì không.
+
+- Thành công (Neural Network):
++ TF-IDF + MLP cho kết quả tốt nhất (Accuracy 0.7755). 
++ Lý do là LogisticRegression là một mô hình tuyến tính, trong khi MLP (mạng nơ-ron) có thể học các mối quan hệ phi tuyến tính phức tạp giữa các đặc trưng TF-IDF. Điều này cho phép nó tìm ra các mẫu (patterns) tinh vi hơn trong dữ liệu mà mô hình tuyến tính bỏ lỡ.
+
+# 4. Thách thức và Giải pháp
+- Thử nghiệm Sklearn (Task 1): Accuracy là 0.0. Nguyên nhân do dữ liệu quá nhỏ (4 mẫu train), không đủ để huấn luyện.
+- Mô hình MLP (Task 4): Thời gian huấn luyện MultilayerPerceptronClassifier lâu hơn đáng kể so với LogisticRegression. Đây là sự đánh đổi chấp nhận được để tăng độ chính xác.
+
+# 5. Trích dẫn Tài liệu tham khảo
+- lab5_text_classification.pdf và criteria.pdf: Hướng dẫn và yêu cầu bài lab.
+- Thư viện PySpark và Scikit-learn: Nền tảng chính để triển khai code.
