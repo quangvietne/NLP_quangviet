@@ -86,7 +86,12 @@ Dựa trên các kết quả thực nghiệm của tôi trong file notebook này
 | **Embedding (Scratch) + LSTM** | - *Lý thuyết:* Mô hình mạnh nhất, có thể học embedding dành riêng cho tác vụ. | - **Thất bại hoàn toàn (F1 \~ 0%)**.<br>- **Đói dữ liệu:** Mô hình quá phức tạp so với 8954 mẫu, dẫn đến "model collapse".<br>- Huấn luyện chậm nhất. |
 
 
-**Kết luận chung:**
+### ⚖️ Kết luận chung:**
 Sau khi chạy cả 4 mô hình, có một điều trở nên rất rõ ràng: Deep Learning không phải là "viên đạn bạc" cho mọi bài toán. Thực tế trong bài lab này, với tập dữ liệu phân loại văn bản tương đối nhỏ (chỉ ~9000 mẫu), mô hình thống kê cổ điển TF-IDF + Logistic Regression đã mang lại hiệu quả vượt trội, chiến thắng một cách áp đảo.
 
 Trong khi đó, các kiến trúc phức tạp như LSTM, dù mạnh mẽ về lý thuyết, lại hoàn toàn thất bại. Chúng bị "đói" dữ liệu (data starvation) và không thể học được các mối liên hệ phức tạp, đặc biệt là khi không có sự hỗ trợ của embedding chất lượng cao (như GloVe hay FastText). Điều này dẫn đến kết quả tệ hơn đáng kể và là một bài học kinh điển về việc lựa chọn mô hình phù hợp với quy mô dữ liệu
+
+### Tài liệu tham khảo : 
+- Link github thầy Phương post trên lớp 
+- Gợi ý code từ Grock
+- Tài liệu từ trang chủ tensorflow
