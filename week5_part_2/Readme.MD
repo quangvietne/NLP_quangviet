@@ -1,6 +1,3 @@
-Chào bạn, dưới đây là **Báo cáo Kết quả (Report)** cho bài toán Part-of-Speech Tagging sử dụng mô hình Simple RNN, dựa trên kết quả huấn luyện từ các Cell 6 và Cell 7 của bạn.
-
-Báo cáo này đáp ứng đầy đủ các tiêu chí bạn yêu cầu: Hiển thị độ chính xác theo từng epoch, báo cáo kết quả tốt nhất, và cung cấp ví dụ dự đoán câu mới.
 
 ## Báo Cáo Kết Quả Mô Hình Simple RNN cho POS Tagging 📊
 
