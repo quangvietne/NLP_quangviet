@@ -1,7 +1,6 @@
 # Báo cáo Lab 5: Xây dựng mô hình RNN cho bài toán Nhận dạng Thực thể Tên (NER)
 
-## 1. Giới thiệu
-Bài thực hành này tập trung vào việc áp dụng kiến thức về Mạng Nơ-ron Hồi quy (Recurrent Neural Networks - RNN) để giải quyết bài toán Nhận dạng Thực thể Tên (Named Entity Recognition - NER). Mô hình được xây dựng bằng framework PyTorch và huấn luyện trên bộ dữ liệu chuẩn CoNLL 2003.
+
 
 ## 2. Các bước thực hiện (Implementation Details)
 
